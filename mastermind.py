@@ -1,13 +1,24 @@
 import tkinter as tk
 from random import *
 
-LARGEUR = 1500
-HAUTEUR = 1300
+LARGEUR = 1000
+HAUTEUR = 600
+couleur = ["red","blue","cyan","yellow","teal","indigo","pink","gold"]
 
 def mastermind():
     pass
 
+def clic(event):
+    X=event.x
+    Y=event.y
+    if Y > 500:
 
+        if X < 120:
+            print(couleur[0])
+        elif X < 300:
+            print(couleur[2])
+        else:
+            print("youpi")
 
 
 # Fenetre Pricipalee
@@ -26,15 +37,20 @@ bouton_retour.grid(row=1, column=3)
 bouton_change= tk.Button(racine, text="changer de mode", command=lambda: mastermind())
 bouton_change.grid(row=1, column=4)
 
-xmin=500
-ymin=300
-xmax=550
-ymax=350
+xmin=LARGEUR//3
+ymin=HAUTEUR//6
+print(xmin,ymin)
+xmax=xmin+25
+ymax=ymin+25
 for j in range (10):
     for i in range(4):
-        cercle = canvas.create_oval(xmin +75*i, ymin +75*j, xmax +75*i, ymax +75*j, fill="white")
+        compteur=i*5
+        cercle = canvas.create_oval(xmin +30*i+compteur, ymin +30*j, xmax +30*i+compteur, ymax +30*j, fill="white")
 
 for i in range (8):
-    cercle = canvas.create_oval(150 +i*200, 1100,220 + i*200, 1170,  fill="white")
+    compteur=i*70
+    cercle = canvas.create_oval(50+50*i+compteur, 500, 120+50*i+compteur, 570, fill=couleur[i])
+
+canvas.bind('<Button-1>',clic)
 racine.mainloop() 
 # Fin de fenetre 
