@@ -54,12 +54,24 @@ ymax=ymin+25
 for j in range (10):
     for i in range(4):
         compteur=i*5
-        cercle = canvas.create_oval(xmin +30*i+compteur, ymin +30*j, xmax +30*i+compteur, ymax +30*j, fill="white")
+        cercle = canvas.create_oval(xmin +30*i+compteur, ymin +30*j, xmax +30*i+compteur, ymax +30*j, fill="white", tags = "inconnu")
 
 for i in range (8):
     compteur=i*70
-    cercle = canvas.create_oval(50+50*i+compteur, 500, 120+50*i+compteur, 570, fill=couleur[i])
+    cercle = canvas.create_oval(50+50*i+compteur, 500, 120+50*i+compteur, 570, fill=couleur[i], tags = [couleur[i], "choix"])
+
+couleur_choisie = []
+def interpretation_clic (event) :
+    cercle_choisi = canvas.find_closest(event.x, event.y)
+    tag_choisi = canvas.gettags(cercle_choisi)
+    global couleur_choisie
+    if "choix" in tag_choisi :
+        couleur_choisie.append(tag_choisi[0])
+    elif "inconnu" in tag_choisi :
+        canvas.itemconfig(cercle_choisi, fill = couleur_choisie[-1])
+        couleur_choisie = []
 
 canvas.bind('<Button-1>',clic)
+canvas.bind('<Button-3>', interpretation_clic)
 racine.mainloop() 
 # Fin de fenetre 
