@@ -20,7 +20,7 @@ def clic(event):
         else:
             print("youpi")
 
-print("iliane le plus beau")
+
 # Fenetre Pricipalee
 racine = tk.Tk() 
 racine.title("Mastermind")
