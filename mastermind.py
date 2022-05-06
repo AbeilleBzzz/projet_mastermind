@@ -11,15 +11,24 @@ def mastermind():
 def clic(event):
     X=event.x
     Y=event.y
-    if Y > 500:
+    if 500 < Y < 570:
 
-        if X < 120:
+        if 50 < X < 120:
             print(couleur[0])
-        elif X < 300:
+        elif 170 < X < 240:
+            print(couleur[1])
+        elif 290 < X < 360:
             print(couleur[2])
-        else:
-            print("youpi")
-
+        elif 410 < X < 480:
+            print (couleur[3])
+        elif 530 < X < 600:
+            print (couleur[4])
+        elif 650 < X < 720:
+            print (couleur[5])
+        elif 770 < X < 840:
+            print (couleur[6])
+        elif 890 < X < 960:
+            print (couleur[7])
 
 # Fenetre Pricipalee
 racine = tk.Tk() 
