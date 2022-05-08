@@ -13,6 +13,7 @@ ymax=ymin+25
 
 cpt = 0
 cpt_list = 0
+cpt_aide = 0
 stop = True
 couleur = ["magenta","darkorchid","darkblue","dodgerblue","mediumaquamarine","palegreen","yellow","salmon"]
 code = []
@@ -21,8 +22,8 @@ code_t = []
 
 #Fonctions
 
-def mastermind():
-    pass
+
+    
 
 def ordi():
     global reponse
@@ -196,7 +197,17 @@ def verifie_sauvegarde(liste) :
         verifie(quatre_elements, compteur)
         compteur.append(0)
         
-
+def aide():
+    global cpt_aide
+    aide = canvas.create_text(100, 250, text = "Couleurs présentes :", fill ="gold", font=('Times', '16'))
+    reponse_ordre = list(reponse)
+    reponse_ordre.sort()
+    if cpt_aide <= 4 :
+        for i in range (cpt_aide) :
+            cercle = canvas.create_oval(100+20*i, 270, 115+20*i, 285, fill=reponse_ordre[i])
+    cpt_aide += 1
+    
+    
 
 
 
@@ -215,7 +226,7 @@ canvas = tk.Canvas(racine, bg="black", width=LARGEUR, height=HAUTEUR)
 canvas.grid(columnspan=5, row = 0, column = 0)
 
 #Boutons
-bouton_aide= tk.Button(racine, text="aide", command=lambda: mastermind())
+bouton_aide= tk.Button(racine, text="aide", command=lambda: aide())
 bouton_aide.grid(row=1, column=0)
 bouton_retrouve= tk.Button(racine, text="retrouver la sauvegarde", command=lambda: load())
 bouton_retrouve.grid(row=1, column=1)
