@@ -13,9 +13,11 @@ ymax=ymin+25
 
 cpt = 0
 cpt_list = 0
+stop = True
 couleur = ["magenta","darkorchid","darkblue","dodgerblue","mediumaquamarine","palegreen","yellow","salmon"]
 code = []
 code_t = []
+
 
 #Fonctions
 
@@ -31,10 +33,10 @@ def debut():
     global reponse
     cpt += 1
     if cpt % 2 == 0 :
-        rect_nr = canvas.create_rectangle(10,30,100,65, fill="black")
+        rect_nr = canvas.create_rectangle((10,30),(100,65), fill="black")
         mode_text = canvas.create_text(50,50,text = "1 joueur", fill="white", font=('Times', '14'))
         reponse = [str(couleur[randint(0, 7)]) for i in range(4)]
-        print(reponse)
+        carre = canvas.create_rectangle((600,70), (1000, 180), fill = "black")
         return reponse
     else:
         rect_nr = canvas.create_rectangle(10,30,100,65, fill="black")
@@ -58,7 +60,7 @@ def start():
 def clic(event):
     X=event.x
     Y=event.y
-    if 500 < Y < 570:
+    if 500 < Y < 570 and stop:
         if 50 < X < 120:
             lecture_clic(couleur[0],code)
         elif 170 < X < 240:
@@ -75,7 +77,7 @@ def clic(event):
             lecture_clic(couleur[6],code)
         elif 890 < X < 960:
             lecture_clic(couleur[7],code)
-    elif 160 < Y < 175 and 850 < X < 960 and len(reponse) == 4:
+    elif 160 < Y < 175 and 850 < X < 960 and len(reponse) == 4 and stop:
         rectangle = canvas.create_rectangle(700, 120, 900, 140, fill = "black")
 
 
@@ -108,6 +110,7 @@ def prise_couleur(liste):
 #pour verifier la reponse
 def verifie(liste_code, code_t):
     #copie de la liste pour pas modifier
+    global stop
     rep = list(reponse)
     liste = list(liste_code)
     list_rep = []
@@ -128,6 +131,9 @@ def verifie(liste_code, code_t):
         cercle = canvas.create_oval(500+12*i, 110 + 30*len(code_t), (500+10)+12*i, 120+ 30*len(code_t), fill=list_rep[i])
     if list_rep == ["green","green","green","green"]:
         gagné = canvas.create_text(500,450,text = "Gagné", fill="white", font=('Times', '26'))
+        stop = False 
+        
+
     list_rep.clear()
 
 
@@ -136,6 +142,7 @@ def verifie(liste_code, code_t):
 def retour():
     code[-1] = "white"
     prise_couleur(code)
+    del code[-1]
 
 
 def sauvegarde() : 
