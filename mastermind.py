@@ -13,7 +13,7 @@ ymax=ymin+25
 
 couleur = ["red","blue","cyan","yellow","teal","indigo","pink","gold"]
 code = []
-reponse = ["red","blue","cyan","yellow"]
+reponse = ["red","cyan","cyan","yellow"]
 #Fonctions
 
 def mastermind():
@@ -52,13 +52,23 @@ def prise_couleur(liste):
         compteur=i*5
         cercle = canvas.create_oval(xmin +30*i+compteur, ymin, xmax +30*i+compteur, ymax, fill=liste[i])
 
+#pour verifier la reponse
 def verifie(liste):
+    #copie de la liste pour pas modifier
+    rep = list(reponse)
     list_rep = []
+    #Bien placé
     for i in range(4):
-        if reponse[i] == liste[i]:
+        if rep[i] == liste[i]:
             list_rep.append("green")
-        elif liste[i] == reponse[0] or liste[i] == reponse[1] or liste[i] == reponse[2] or liste[i] == reponse[3]:
+            rep[i] = "white"
+            liste[i] = "*"
+    #Mal placé
+    for i in range(4):
+        if rep[i] == liste[0] or rep[i] == liste[1] or rep[i] == liste[2] or rep[i] == liste[3]:
             list_rep.append("red")
+            liste[liste.index(rep[i])] = "*"
+            rep[i] = "white"
     list_rep.sort()
     for i in range(len(list_rep)):
         cercle = canvas.create_oval(500+12*i, 110, (500+10)+12*i, 120, fill=list_rep[i])
