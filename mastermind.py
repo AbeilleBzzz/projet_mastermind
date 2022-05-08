@@ -138,6 +138,28 @@ def retour():
     prise_couleur(code)
 
 
+def sauvegarde() : 
+    fic = open("sauvegarde.txt", "w")
+    fic.write(str(code_t)+"/n")
+    fic.write(str(reponse)+"/n")
+    fic.close()
+
+def load() : 
+    fic = open("sauvegarde", "r")
+    liste = fic.readlines()
+    for j in range (10):
+        for i in range(4):
+            compteur=i*5
+            cercle = canvas.create_oval(xmin +30*i+compteur, ymin +30*j, xmax +30*i+compteur, ymax +30*j, fill=liste[j][i])
+    reponse[0] = liste[-1][0]
+    reponse[1] = liste[-1][1]
+    reponse[2] = liste[-1][2]
+    reponse[3] = liste[-1][3]
+
+    
+    
+
+
 
 # Fenetre Pricipalee
 racine = tk.Tk() 
@@ -148,9 +170,9 @@ canvas.grid(columnspan=5, row = 0, column = 0)
 #Boutons
 bouton_aide= tk.Button(racine, text="aide", command=lambda: mastermind())
 bouton_aide.grid(row=1, column=0)
-bouton_retrouve= tk.Button(racine, text="retrouver la sauvegarde", command=lambda: mastermind())
+bouton_retrouve= tk.Button(racine, text="retrouver la sauvegarde", command=lambda: load())
 bouton_retrouve.grid(row=1, column=1)
-bouton_sauvegarde= tk.Button(racine, text="sauvegarder", command=lambda: mastermind())
+bouton_sauvegarde= tk.Button(racine, text="sauvegarder", command=lambda: sauvegarde())
 bouton_sauvegarde.grid(row=1, column=2)
 bouton_retour= tk.Button(racine, text="retour", command=lambda: retour())
 bouton_retour.grid(row=1, column=3)
