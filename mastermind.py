@@ -13,18 +13,22 @@ ymax=ymin+25
 
 cpt = 0
 cpt_list = 0
-couleur = ["red","blue","cyan","yellow","teal","indigo","pink","gold"]
+couleur = ["magenta","darkorchid","darkblue","dodgerblue","mediumaquamarine","palegreen","yellow","salmon"]
 code = []
 code_t = []
-reponse = [str(couleur[randint(0, 7)]) for i in range(4)]
-print(reponse)
+
 #Fonctions
 
 def mastermind():
     pass
 
+def ordi():
+    global reponse
+    reponse = [str(couleur[randint(0, 7)]) for i in range(4)]
+
 def debut():
     global cpt
+    global reponse
     cpt += 1
     if cpt % 2 == 0 :
         rect_nr = canvas.create_rectangle(10,30,100,65, fill="black")
@@ -35,9 +39,14 @@ def debut():
     else:
         rect_nr = canvas.create_rectangle(10,30,100,65, fill="black")
         mode_text = canvas.create_text(50,50,text = "2 joueurs", fill="white", font=('Times', '14'))
+        consigne = canvas.create_text(750,100,text = "Entrez le code :", fill="white", font=('Times', '14'))
+        reponse.clear()
+        ok = canvas.create_rectangle(850,160,900,175, fill="dimgray")
+        texto = canvas.create_text(875,168, text = "Validé",  fill="white", font=('Times', '10'))
 
 
 def start():
+    ordi()
     for j in range (10):
         for i in range(4):
             compteur=i*5
@@ -66,19 +75,31 @@ def clic(event):
             lecture_clic(couleur[6],code)
         elif 890 < X < 960:
             lecture_clic(couleur[7],code)
+    elif 160 < Y < 175 and 850 < X < 960 and len(reponse) == 4:
+        rectangle = canvas.create_rectangle(700, 120, 900, 140, fill = "black")
 
-def lecture_clic(color,code):   
-    if len(code_t) < 10:
-        if len(code) < 4:
-            code.append(color)
-            prise_couleur(code)
-        if len(code) == 4:
-            verifie(code)
-            code_t.append(list(code))
-            code.clear() 
-            
+
+def lecture_clic(color,code):
+    global reponse
+    if len(reponse) == 4:   
+        if len(code_t) < 10:
+            if len(code) < 4:
+                code.append(color)
+                prise_couleur(code)
+            if len(code) == 4:
+                verifie(code)
+                code_t.append(list(code))
+                code.clear() 
+        else:
+            perdu = canvas.create_text(500,450,text = "perdu", fill="white", font=('Times', '26'))
+            affiche_code_secret()
     else:
-        perdu = canvas.create_text(500,450,text = "perdu", fill="white", font=('Times', '26'))
+        reponse.append(color)
+        affiche_code_secret()
+
+def affiche_code_secret():
+    for i in range(len(reponse)):
+        cercle = canvas.create_oval(700+i*20,120,715+i*20,135, fill=reponse[i])
 
 def prise_couleur(liste):
     for i in range(len(liste)):
