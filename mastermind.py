@@ -87,7 +87,7 @@ def lecture_clic(color,code):
                 code.append(color)
                 prise_couleur(code)
             if len(code) == 4:
-                verifie(code)
+                verifie(code, code_t)
                 code_t.append(list(code))
                 code.clear() 
         else:
@@ -106,7 +106,7 @@ def prise_couleur(liste):
         cercle = canvas.create_oval(xmin +35*i, ymin + 30*(len(code_t)), xmax +35*i, ymax + 30*(len(code_t)), fill=liste[i])
 
 #pour verifier la reponse
-def verifie(liste_code):
+def verifie(liste_code, code_t):
     #copie de la liste pour pas modifier
     rep = list(reponse)
     liste = list(liste_code)
@@ -139,22 +139,62 @@ def retour():
 
 
 def sauvegarde() : 
-    fic = open("sauvegarde.txt", "w")
-    fic.write(str(code_t)+"/n")
-    fic.write(str(reponse)+"/n")
-    fic.close()
+    if len(code) != 0 :
+        erreur = canvas.create_text(730, 200, text = "Il faut compléter la ligne afin de sauvegarder.", fill ="red", font = ('Times', '14'))
+    else :
+        correct = canvas.create_rectangle((550,150),(1000, 250), fill='black')
+        fic = open("sauvegarde.py", "w")
+        for j in range(len(code_t)) : 
+            for i in range(4) :
+                fic.write(str(code_t[j][i])+" ")
+        for i in range(4) :
+            fic.write(str(reponse[i])+ " ")
+
+        
+        fic.close()
 
 def load() : 
-    fic = open("sauvegarde", "r")
-    liste = fic.readlines()
-    for j in range (10):
-        for i in range(4):
-            compteur=i*5
-            cercle = canvas.create_oval(xmin +30*i+compteur, ymin +30*j, xmax +30*i+compteur, ymax +30*j, fill=liste[j][i])
-    reponse[0] = liste[-1][0]
-    reponse[1] = liste[-1][1]
-    reponse[2] = liste[-1][2]
-    reponse[3] = liste[-1][3]
+    global reponse
+    fic = open("sauvegarde.py", "r")
+    liste =fic.readline()
+    liste = liste.split()
+    reponse = liste[-4] + " " + liste [-3] + " " + liste[-2] + " " + liste[-1]
+    reponse = reponse.split()
+    del liste[-4]
+    del liste[-3]
+    del liste[-2]
+    del liste[-1]
+
+    print (liste)
+    print(reponse)
+    affichage_sauvegarde(liste)
+    verifie_sauvegarde(liste)
+
+def affichage_sauvegarde(liste) :
+    compteur = 0
+    for j in range(int(len(liste)/4)) :
+        for i in range(4) :
+            cercle = canvas.create_oval(xmin +35*i, ymin + 30*j, xmax +35*i, ymax + 30*j, fill=liste[compteur])
+            compteur += 1
+
+def verifie_sauvegarde(liste) :
+    global code_t
+    compteur = []
+    for i in range(int(len(liste)//4)) :
+        quatre_elements = liste[0] + " " + liste [1] + " " + liste[2] + " " + liste[3]
+        quatre_elements = quatre_elements.split()
+        code_t.append(quatre_elements)
+        for i in range (4) :
+            del liste[0]
+        verifie(quatre_elements, compteur)
+        compteur.append(0)
+        
+
+
+
+
+   
+    
 
     
     
