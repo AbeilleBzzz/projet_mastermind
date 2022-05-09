@@ -3,6 +3,7 @@ from random import *
 
 #Variable globale 
 
+#grandeur
 LARGEUR = 1000
 HAUTEUR = 600
 
@@ -11,10 +12,15 @@ ymin=HAUTEUR//6
 xmax=xmin+25
 ymax=ymin+25
 
+#compteur
 cpt = 0
 cpt_list = 0
 cpt_aide = 0
+
+#Booléen
 stop = True
+
+#Liste
 couleur = ["magenta","darkorchid","darkblue","dodgerblue","mediumaquamarine","palegreen","yellow","salmon"]
 code = []
 code_t = []
@@ -23,13 +29,14 @@ code_t = []
 #Fonctions
 
 
-    
-
 def ordi():
+    """Initilisation du code secret au hasard"""
     global reponse
     reponse = [str(couleur[randint(0, 7)]) for i in range(4)]
 
+
 def debut():
+    """Initialisation du nombre de joueur, donc du code secret"""
     global cpt
     global reponse
     cpt += 1
@@ -49,6 +56,7 @@ def debut():
 
 
 def start():
+    """Affichage du plateau de jeu"""
     ordi()
     for j in range (10):
         for i in range(4):
@@ -58,7 +66,9 @@ def start():
         compteur=i*70
         cercle = canvas.create_oval(50+50*i+compteur, 500, 120+50*i+compteur, 570, fill=couleur[i], tags = [couleur[i], "choix"])
 
+
 def clic(event):
+    """Identifications des clics"""
     X=event.x
     Y=event.y
     if 500 < Y < 570 and stop:
@@ -83,6 +93,7 @@ def clic(event):
 
 
 def lecture_clic(color,code):
+    """Interpretation des clics sur les couleur, creation du code proposer par le joueur"""
     global reponse
     if len(reponse) == 4:   
         if len(code_t) < 10:
@@ -100,16 +111,22 @@ def lecture_clic(color,code):
         reponse.append(color)
         affiche_code_secret()
 
-def affiche_code_secret():
-    for i in range(len(reponse)):
-        cercle = canvas.create_oval(700+i*20,120,715+i*20,135, fill=reponse[i])
 
 def prise_couleur(liste):
+    """Affiche le code proposer par le joueur"""
     for i in range(len(liste)):
         cercle = canvas.create_oval(xmin +35*i, ymin + 30*(len(code_t)), xmax +35*i, ymax + 30*(len(code_t)), fill=liste[i])
 
+
+def affiche_code_secret():
+    """Affiche le code secret"""
+    for i in range(len(reponse)):
+        cercle = canvas.create_oval(700+i*20,120,715+i*20,135, fill=reponse[i])
+
+
 #pour verifier la reponse
 def verifie(liste_code, code_t):
+    """Compare le code proposer avec le code secret, renvois si une billes est bien placé ou mal placé"""
     #copie de la liste pour pas modifier
     global stop
     rep = list(reponse)
@@ -133,20 +150,18 @@ def verifie(liste_code, code_t):
     if list_rep == ["green","green","green","green"]:
         gagné = canvas.create_text(500,450,text = "Gagné", fill="white", font=('Times', '26'))
         stop = False 
-        
-
     list_rep.clear()
 
 
-
-
 def retour():
+    """Permet de revenir en arriere sur la ligne en cours"""
     code[-1] = "white"
     prise_couleur(code)
     del code[-1]
 
 
 def sauvegarde() : 
+    """Sauvegarde la partie en cours"""
     if len(code) != 0 :
         erreur = canvas.create_text(730, 200, text = "Il faut compléter la ligne afin de sauvegarder.", fill ="red", font = ('Times', '14'))
     else :
@@ -157,11 +172,11 @@ def sauvegarde() :
                 fic.write(str(code_t[j][i])+" ")
         for i in range(4) :
             fic.write(str(reponse[i])+ " ")
-
-        
         fic.close()
 
+
 def load() : 
+    "Retrouve la derniere sauvegarde"
     global reponse
     fic = open("sauvegarde.py", "r")
     liste =fic.readline()
@@ -172,20 +187,21 @@ def load() :
     del liste[-3]
     del liste[-2]
     del liste[-1]
-
-    print (liste)
-    print(reponse)
     affichage_sauvegarde(liste)
     verifie_sauvegarde(liste)
 
+
 def affichage_sauvegarde(liste) :
+    """Affiche la derniere sauvegarde faite"""
     compteur = 0
     for j in range(int(len(liste)/4)) :
         for i in range(4) :
             cercle = canvas.create_oval(xmin +35*i, ymin + 30*j, xmax +35*i, ymax + 30*j, fill=liste[compteur])
             compteur += 1
 
+
 def verifie_sauvegarde(liste) :
+    """Affiche les billes bien placées ou mal placées de la derniere sauvegarde"""
     global code_t
     compteur = []
     for i in range(int(len(liste)//4)) :
@@ -197,7 +213,9 @@ def verifie_sauvegarde(liste) :
         verifie(quatre_elements, compteur)
         compteur.append(0)
         
+
 def aide():
+    """Affiche une aide simple qui revoit une par une les couleur presente dans le code secret par ordre alphabetique"""
     global cpt_aide
     aide = canvas.create_text(100, 250, text = "Couleurs présentes :", fill ="gold", font=('Times', '16'))
     reponse_ordre = list(reponse)
@@ -210,16 +228,12 @@ def aide():
     
 
 
-
    
     
-
-    
-    
-
-
+##############################################
 
 # Fenetre Pricipalee
+
 racine = tk.Tk() 
 racine.title("Mastermind")
 canvas = tk.Canvas(racine, bg="black", width=LARGEUR, height=HAUTEUR)
@@ -228,20 +242,27 @@ canvas.grid(columnspan=5, row = 0, column = 0)
 #Boutons
 bouton_aide= tk.Button(racine, text="aide", command=lambda: aide())
 bouton_aide.grid(row=1, column=0)
+
 bouton_retrouve= tk.Button(racine, text="retrouver la sauvegarde", command=lambda: load())
 bouton_retrouve.grid(row=1, column=1)
+
 bouton_sauvegarde= tk.Button(racine, text="sauvegarder", command=lambda: sauvegarde())
 bouton_sauvegarde.grid(row=1, column=2)
+
 bouton_retour= tk.Button(racine, text="retour", command=lambda: retour())
 bouton_retour.grid(row=1, column=3)
+
 bouton_change= tk.Button(racine, text="changer de mode", command=lambda: debut())
 bouton_change.grid(row=1, column=4)
+
+#Texte
 titre = canvas.create_text(500,50,text = "MASTERMIND", fill="white", font=('Times', '24'))
 mode_text = canvas.create_text(50,50,text = "1 joueur", fill="white", font=('Times', '14'))
 
-
-
+#lancement du jeu
 start()
+
+#reconnaissance des clics
 canvas.bind('<Button-1>',clic)
 
 racine.mainloop() 
